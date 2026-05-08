@@ -1,36 +1,84 @@
-# Proyecto de Monitoreo de Logs con ELK Stack
-Este proyecto utiliza Elasticsearch, Logstash, Kibana y Filebeat para monitorear y analizar logs. A continuación se detallan los pasos para poner en marcha el proyecto.
+# ELK Stack Log Monitoring
 
-Instrucciones
-1. Montar el Docker Compose
-Para iniciar los servicios de Elasticsearch, Logstash, Kibana y Filebeat, sigue estos pasos:
+This project uses **Elasticsearch**, **Logstash**, **Kibana**, and **Filebeat** to monitor and analyze logs.
 
-Ejecuta el siguiente comando para montar los servicios definidos en docker-compose.yml:
+## Prerequisites
+
+- Docker and Docker Compose installed
+- Minimum 4GB RAM allocated to Docker
+- Ports 5601 (Kibana), 9200 (Elasticsearch), and 5044 (Logstash) available
+
+## Setup Instructions
+
+### 1. Start the Docker Compose Stack
+
+Run the following command to start all services (Elasticsearch, Logstash, Kibana, and Filebeat):
+
+```bash
 docker-compose up -d
+```
 
-2. Utilizar Logs ya guardados o ejecutar generate_logs.sh
-a. Utilizar Logs ya Guardados
-Si ya tienes logs guardados en los directorios especificados en filebeat.yml, Filebeat los leerá y enviará a Logstash automáticamente.
+### 2. Provide Log Data
 
-b. Ejecutar generate_logs.sh para generar Logs
-Para generar logs de manera continua y simular la ingesta de datos, puedes ejecutar el script generate_logs.sh en segundo plano:
+You have two options:
 
-Asegúrate de que el script generate_logs.sh tenga permisos de ejecución: chmod +x generate_logs.sh
+#### Option A: Use Existing Logs
 
-Ejecuta el script ./generate_logs.sh
+If you already have log files in the directories specified in `filebeat.yml`, Filebeat will automatically read and forward them to Logstash.
 
-3. Conexión a Kibana
-Para acceder a Kibana y visualizar los datos:
+#### Option B: Generate Logs (Simulate Ingestion)
 
-Abre tu navegador web y navega a http://localhost:5601.
+Run the log generator script in the background:
 
-Inicia sesión con las credenciales configuradas en tu archivo .env (debería hacerse de manera automática).
+```bash
+chmod +x generate_logs.sh
+./generate_logs.sh
+```
 
-4. Importar Vistas y Dashboards en Kibana
-Para importar los índices y vistas predefinidos en Kibana:
+This will continuously generate sample logs to simulate real-time data ingestion.
 
-Navega a Stack Management en el menú de la izquierda.
+### 3. Access Kibana
 
-Ve a Kibana -> Saved Objects.
+Open your web browser and navigate to:
 
-Haz clic en Import y selecciona el archivo kibanaviews.ndjson que contiene las vistas y dashboards exportados.
+```
+http://localhost:5601
+```
+
+Login credentials are configured in your `.env` file (automatic login should work if properly set up).
+
+### 4. Import Dashboards and Views
+
+To import predefined Kibana views and dashboards:
+
+1. Navigate to **Stack Management** in the left sidebar menu
+2. Go to **Kibana** → **Saved Objects**
+3. Click **Import** and select the `kibanaviews.ndjson` file
+
+## Services Overview
+
+| Service | Port | Purpose |
+|---------|------|---------|
+| Elasticsearch | 9200 | Log storage and indexing |
+| Logstash | 5044 | Log processing pipeline |
+| Kibana | 5601 | Visualization and dashboarding |
+| Filebeat | - | Log shipping agent |
+
+## Project Structure
+
+```
+├── docker-compose.yml
+├── filebeat.yml
+├── generate_logs.sh
+├── kibanaviews.ndjson
+├── .env
+└── logs/               # Directory for log files
+```
+
+## Troubleshooting
+
+- **Elasticsearch won't start**: Ensure `vm.max_map_count` is set properly:  
+  `sudo sysctl -w vm.max_map_count=262144`
+- **No data in Kibana**: Verify Filebeat is running and logs exist in the specified paths
+- **Connection refused**: Ensure all containers are running: `docker-compose ps`
+```
