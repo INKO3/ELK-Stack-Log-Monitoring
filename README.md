@@ -81,4 +81,3 @@ To import predefined Kibana views and dashboards:
   `sudo sysctl -w vm.max_map_count=262144`
 - **No data in Kibana**: Verify Filebeat is running and logs exist in the specified paths
 - **Connection refused**: Ensure all containers are running: `docker-compose ps`
-```
