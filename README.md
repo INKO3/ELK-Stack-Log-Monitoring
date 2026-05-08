@@ -1,5 +1,9 @@
 # ELK Stack Log Monitoring
 
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)
+![Kibana](https://img.shields.io/badge/Kibana-005571?style=for-the-badge&logo=kibana&logoColor=white)
+
 This project uses **Elasticsearch**, **Logstash**, **Kibana**, and **Filebeat** to monitor and analyze logs.
 
 ## Prerequisites
